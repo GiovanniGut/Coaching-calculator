@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Date Coaching</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="date"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .result {
+            margin-top: 35px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .result.show {
+            opacity: 1;
+        }
+        
+        .result-label {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .result-date {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .result-info {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calcolatore Date Coaching</h1>
+        
+        <div class="input-group">
+            <label for="dataInizio">Data inizio percorso</label>
+            <input type="date" id="dataInizio">
+        </div>
+        
+        <div class="input-group">
+            <label for="numeroSessioni">Numero di sessioni</label>
+            <input type="number" id="numeroSessioni" min="1" value="8">
+        </div>
+        
+        <div class="input-group">
+            <label for="settimaneIntervallo">Settimane tra una sessione e l'altra</label>
+            <input type="number" id="settimaneIntervallo" min="1" value="2">
+        </div>
+        
+        <div class="result" id="result">
+            <div class="result-label">Data fine percorso</div>
+            <div class="result-date" id="dataFine">-</div>
+            <div class="result-info" id="durataInfo">-</div>
+        </div>
+    </div>
+    
+    <script>
+        const dataInizio = document.getElementById('dataInizio');
+        const numeroSessioni = document.getElementById('numeroSessioni');
+        const settimaneIntervallo = document.getElementById('settimaneIntervallo');
+        const result = document.getElementById('result');
+        const dataFineEl = document.getElementById('dataFine');
+        const durataInfoEl = document.getElementById('durataInfo');
+        
+        // Imposta data di oggi come default
+        dataInizio.valueAsDate = new Date();
+        
+        function calcolaDataFine() {
+            const inizio = dataInizio.valueAsDate;
+            const sessioni = parseInt(numeroSessioni.value);
+            const settimane = parseInt(settimaneIntervallo.value);
+            
+            if (!inizio || !sessioni || !settimane || sessioni < 1 || settimane < 1) {
+                result.classList.remove('show');
+                return;
+            }
+            
+            // Calcola la data di fine
+            const giorniTotali = (sessioni - 1) * settimane * 7;
+            const dataFine = new Date(inizio);
+            dataFine.setDate(dataFine.getDate() + giorniTotali);
+            
+            // Formatta la data
+            const opzioni = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dataFormattata = dataFine.toLocaleDateString('it-IT', opzioni);
+            
+            // Calcola durata in settimane
+            const durataSettimane = (sessioni - 1) * settimane;
+            const durataMesi = Math.round(durataSettimane / 4.33);
+            
+            dataFineEl.textContent = dataFormattata;
+            durataInfoEl.textContent = `Durata: ${durataSettimane} settimane (circa ${durataMesi} mesi)`;
+            result.classList.add('show');
+        }
+        
+        dataInizio.addEventListener('change', calcolaDataFine);
+        numeroSessioni.addEventListener('input', calcolaDataFine);
+        settimaneIntervallo.addEventListener('input', calcolaDataFine);
+        
+        // Calcolo iniziale
+        calcolaDataFine();
+    </script>
+</body>
+</html>
