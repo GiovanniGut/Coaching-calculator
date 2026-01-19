@@ -9,7 +9,7 @@ Strumento semplice per calcolare la data di fine di un percorso di coaching in b
 
 Apri il file `index.html` nel browser oppure usa la versione online:
 
-**🔗 [https://giovannigut.github.io/coaching-calculator](https://giovannigut.github.io/coaching-calculator)**
+**🔗 [https://giovannigut.github.io/coaching-calculator](https://giovannigut.github.io/Coaching-calculator)**
 
 ## Caratteristiche
 
